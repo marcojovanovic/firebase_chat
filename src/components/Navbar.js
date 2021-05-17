@@ -16,7 +16,7 @@ function Navbar() {
       <NavbarLogo>Web Messenger</NavbarLogo>
       <NavbarUl>
         <NavbarLi><NavLink to={'/login'}>Login</NavLink></NavbarLi>
-        <NavbarLi><NavLink to={'/signup'}>Sign up</NavLink></NavbarLi>
+        <NavbarLi><NavLink to={'/register'}>Sign up</NavLink></NavbarLi>
         <NavbarLi><Link onClick={handleLogOut} to={'/register'}>Logout</Link></NavbarLi>
         Hi  {nameUser.firstName} {nameUser.lastName}
       </NavbarUl>

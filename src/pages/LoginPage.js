@@ -1,8 +1,9 @@
 import React from 'react';
 
 import { ChatContext } from '../context';
+
 import { useHistory } from 'react-router-dom'
-import { authDb, chatDatabase } from '../firebase/config';
+import { authDb, } from '../firebase/config';
 import styled from 'styled-components'
 
 function LoginPage() {

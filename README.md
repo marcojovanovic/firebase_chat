@@ -1,5 +1,4 @@
-Pogledaj projekat na sledecem linku 
+Izrada projekta u toku
 
 
 
-[Simple React Tabs](https://romantic-lalande-d98002.netlify.app/)

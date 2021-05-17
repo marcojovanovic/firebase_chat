@@ -15,6 +15,10 @@ const ChatProvider = ({ children }) => {
 
   const [nameUser, setNameUser] = useState(handleCurrentUserDisplay());
 
+  const [allUsers, setAllUsers] = useState([]);
+
+ // const [currentId, setCurrentId] = useState('');
+
   const handleRegister = async (e) => {
     e.preventDefault();
 
@@ -29,27 +33,32 @@ const ChatProvider = ({ children }) => {
             displayName: name,
           })
           .then(() => {
-            chatDatabase.collection('users').add({
+            chatDatabase.collection('users')
+            .doc(authObj.user.uid)
+            .set ({
               firstName: firstName,
               lastName: lastName,
               uid: authObj.user.uid,
               createdAt: new Date(),
-              isOnline:true
+              isOnline: true,
             });
           })
           .then(() => {
-            //succeful
             const loggedInUser = {
               firstName: firstName,
               lastName: lastName,
               uid: authObj.user.uid,
               email: email,
             };
+
             localStorage.setItem('user', JSON.stringify(loggedInUser));
+
+         
+
             console.log('User logged in successfully...!');
           });
 
-        window.location.reload();
+        //window.location.reload()
       })
       .catch((err) => {
         console.log(err);
@@ -63,11 +72,28 @@ const ChatProvider = ({ children }) => {
 
   useEffect(() => {
     handleCurrentUserDisplay();
-  }, [nameUser]);
+  }, []);
 
   function handleCurrentUserDisplay() {
     return JSON.parse(localStorage.getItem('user')) || false;
   }
+
+  useEffect(() => {
+    chatDatabase.collection('users').onSnapshot((snapshot) => {
+      let documents = [];
+
+      snapshot.forEach((doc) => {
+        if (doc.data().uid !== nameUser.uid) {
+          documents.push(doc.data());
+        }
+      });
+
+      setAllUsers(documents);
+    });
+  }, []);
+
+ 
+
 
   const handleLogOut = async () => {
     await authDb
@@ -76,10 +102,9 @@ const ChatProvider = ({ children }) => {
       .then(() => {
         localStorage.clear();
       })
-      .catch(err=>{
-        console.log(err)
-
-      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -97,6 +122,7 @@ const ChatProvider = ({ children }) => {
         setLastName,
         nameUser,
         handleLogOut,
+        allUsers
       }}
     >
       {children}
